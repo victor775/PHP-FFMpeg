@@ -44,6 +44,8 @@ class FFProbe
     /** @var MapperInterface */
     private $mapper;
 
+    private $streamTimeout = 5000000;
+
     public function __construct(FFProbeDriver $ffprobe, Cache $cache)
     {
         $this->ffprobe = $ffprobe;
@@ -255,6 +257,11 @@ class FFProbe
             $commands[] = 'json';
         } else {
             $parseIsToDo = true;
+        }
+
+        if (filter_var($pathfile, FILTER_VALIDATE_URL)) {
+            $commands[] = '-timeout';
+            $commands[] = $this->streamTimeout;
         }
 
         try {
