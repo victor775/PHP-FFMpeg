@@ -44,6 +44,8 @@ class FFProbe
     /** @var MapperInterface */
     private $mapper;
 
+    private $streamTimeout = 5000000;
+
     public function __construct(FFProbeDriver $ffprobe, Cache $cache)
     {
         $this->ffprobe = $ffprobe;
@@ -256,6 +258,9 @@ class FFProbe
         } else {
             $parseIsToDo = true;
         }
+
+        $commands[] = '-timeout';
+        $commands[] = $this->streamTimeout;
 
         try {
             $output = $this->ffprobe->command($commands);
